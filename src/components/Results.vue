@@ -27,12 +27,6 @@
           </button>
         </div>
       </div>
-      <!-- <div class="w-3/12 mx-auto">
-        <label for="addPlayer" class="block text-gray-700 mt-6">Add Player</label>
-        <div class="mt-1 relative rounded-md shadow-sm">
-          <input id="addPlayer" class="form-input block w-full border-2 border-gray-400 rounded-md" placeholder="Teferi" />
-        </div>
-      </div> -->
     </div>
     <div v-if="pListLength == 0" class="mt-6 text-base text-gray-500">
       Your player list is empty. Add some players!
