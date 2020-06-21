@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted () {
-    window.setInterval(this.chooseTitle, 5000)
+    window.setInterval(this.chooseTitle, 3000)
   }
 }
 </script>
