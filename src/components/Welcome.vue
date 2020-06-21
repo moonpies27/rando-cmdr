@@ -6,7 +6,7 @@
     </div>
     <div>
       <p class="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl text-center">
-        Inspired by the <a href="https://www.youtube.com/playlist?list=PL5d1KNNFArSNNRrpJjhf1WrwwuZqUcg0K" class="no-underline hover:underline text-blue-500">Commander Vs. Series</a>, this is a simple app to allow you to choose random Commanders for yourelf and your playgroup.
+        Inspired by the <a href="https://www.youtube.com/playlist?list=PL5d1KNNFArSNNRrpJjhf1WrwwuZqUcg0K" class="no-underline hover:underline text-blue-500">Commander Vs. Series</a>, this is a simple app to allow you to choose random Commanders for yourself and your playgroup.
       </p>
     </div>
   </div>
