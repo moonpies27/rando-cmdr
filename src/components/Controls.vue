@@ -15,7 +15,9 @@
     <div v-if="showEdit" class="mt-10 text-gray-700 text-center">
       <h2 class="mb-6">Current Player List</h2>
       <ul>
-        <li v-for="(p, idx) in players" :key=idx>{{ p }} <button @click="removeExistingPlayer(idx)" class="bg-red-400 px-1 text-xs text-white rounded-md">X</button></li>
+        <li v-for="(p, idx) in players" :key=idx class="flex items-center justify-center">
+          {{ p }}
+          <button @click="removeExistingPlayer(idx)" class="bg-red-400 px-1 text-xs text-white rounded-md ml-2">X</button></li>
       </ul>
       <div class="w-64 mx-auto">
         <div class="mt-6 flex rounded-md shadow-sm">
@@ -37,7 +39,7 @@ import { mapState, mapMutations } from 'vuex'
 
 const ax = axios.create({
   baseURL: 'https://api.scryfall.com',
-  timeout: 2000,
+  timeout: 20000,
   headers: {
     Accept: 'application/json'
   }
