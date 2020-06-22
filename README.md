@@ -4,7 +4,7 @@ A simple utility for quickly assigning random commanders to players in a game of
 ## Why?
 My friends and I love to play the MtG game format Commander (https://mtgcommander.net)
 
-We decided that it would be fun to randomly assign Commanders to each player, have them build that deck, then present the deck to another player to play that week. This tool is simply and easy and efficient way to automate the assignment of Commanders to each player as well as the recipient of that player's deck.
+We decided that it would be fun to randomly assign Commanders to each player, have them build that deck, then present the deck to another player to play that week. This app is designed to automate that process in an easy-to-use interface. It's also a way for me to get more familiar with TailwindCSS and sharpen my Vue.js skills.
 
 ## Project setup
 ```
