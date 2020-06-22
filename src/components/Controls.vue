@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+    <div class="mt-5 max-w-2xl mx-auto sm:flex sm:justify-center md:mt-8">
       <div class="rounded-md shadow">
         <button @click="assignCommanders" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
           Spin the Wheel!
@@ -9,6 +9,11 @@
       <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
         <button @click="editPlayers" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-500 focus:outline-none focus:shadow-outline-blue transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
           Edit Player List
+        </button>
+      </div>
+      <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+        <button @click="changeFilters" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-500 focus:outline-none focus:shadow-outline-blue transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+          Change Filters
         </button>
       </div>
     </div>
@@ -30,6 +35,19 @@
         </div>
       </div>
     </div>
+    <div v-if="showFilters" class="mt-6 mb-4 grid grid-cols-2 gap-4 max-w-3xl mx-auto">
+      <div v-for="filter in filters" :key="filter.value" class="flex items-start">
+        <div class="mr-2 mt-1">
+          <input :id="filter.value" type="checkbox" :value="filter.value" v-model="checkedFilters" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
+        </div>
+        <div>
+          <label :for="filter.value" class="font-medium text-gray-700">
+            {{ filter.label }}
+          </label>
+          <p class="text-gray-500 text-sm max-w-sm">{{ filter.desc }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,11 +66,17 @@ const ax = axios.create({
 export default {
   data () {
     return {
-      showEdit: false
+      showEdit: false,
+      showFilters: false,
+      checkedFilters: []
     }
   },
   computed: {
-    ...mapState(['players', 'cards'])
+    ...mapState([
+      'players',
+      'cards',
+      'filters'
+    ])
   },
   methods: {
     ...mapMutations([
@@ -61,6 +85,7 @@ export default {
       'setCards'
     ]),
     editPlayers () {
+      this.showFilters = false
       this.showEdit = !this.showEdit
     },
     removeExistingPlayer (idx) {
@@ -73,14 +98,19 @@ export default {
         document.getElementById('addNewPlayerInput').value = ''
       }
     },
+    changeFilters () {
+      this.showEdit = false
+      this.showFilters = !this.showFilters
+    },
     async assignCommanders () {
       this.showEdit = false
+      this.showFilters = false
       try {
-        const searchURL = '/cards/random?q=is%3Acommander+f%3Acommander'
+        const searchUrl = this.determineUrl(this.checkedFilters)
         const responses = []
         this.players.map(async () => {
           try {
-            const response = await ax.get(searchURL)
+            const response = await ax.get(searchUrl)
             responses.push(response.data)
           } catch (err) {
             console.error(err)
@@ -89,6 +119,37 @@ export default {
         this.setCards(responses)
       } catch (err) {
         console.error(err)
+      }
+    },
+    determineUrl (filters) {
+      let baseUrl = '/cards/random?q=t%3Alegendary+'
+      if (!filters.length) {
+        baseUrl += 'is%3Acommander+f%3Acommander'
+        return baseUrl
+      } else {
+        const params = []
+        if (!filters.includes('includeVanilla')) {
+          params.push('-is%3Avanilla')
+        }
+        if (!filters.includes('includeFrenchVanilla')) {
+          params.push('-is%3Afrenchvanilla')
+        }
+        if (!filters.includes('includeBanned')) {
+          params.push('-banned%3Acommander')
+        }
+        if (!filters.includes('includeFlip')) {
+          params.push('-is%3Aflip')
+        }
+        if (!filters.includes('includeSilverBorder')) {
+          params.push('-border%3Asilver')
+        }
+        if (filters.includes('includePlaneswalkers')) {
+          params.push('t%3Acreature+or+t%3Aplaneswalker')
+        } else {
+          params.push('t%3Acreature')
+        }
+        const finalUrl = baseUrl + params.join('+')
+        return finalUrl
       }
     }
   }
