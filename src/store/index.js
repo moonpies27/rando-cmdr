@@ -10,24 +10,34 @@ export default new Vuex.Store({
     cards: [],
     filters: [
       {
+        label: 'Include Vanilla',
+        desc: 'Include creatures that don\'t have abilities.',
+        value: 'includeVanilla'
+      },
+      {
+        label: 'Include French-Vanilla',
+        desc: 'Include creatures that only have evergreen abilities such as Flying, Trample, or Morph.',
+        value: 'includeFrenchVanilla'
+      },
+      {
         label: 'Include Planeswalkers',
-        desc: 'Return planeswalkers in the result set.',
+        desc: 'Include all planeswalkers in the result set.',
         value: 'includePlaneswalkers'
       },
       {
-        label: 'Exclude Vanilla/French-Vanilla',
-        desc: 'Exclude creatures that don\'t have abilities or only have evergreen abilities such as Flying or Trample.',
-        value: 'excludeVanilla'
-      },
-      {
         label: 'Include Banned Commanders',
-        desc: 'Includes legendary creatures that appear on the official Commander ban list.',
+        desc: 'Include legendary creatures that appear on the official Commander ban list.',
         value: 'includeBanned'
       },
       {
-        label: 'Exclude Silver Border',
-        desc: 'Excludes legendary creatures and/or planeswalkers from silver-bordered sets.',
-        value: 'excludeSilveBorder'
+        label: 'Include Silver Border',
+        desc: 'Include legendary creatures and/or planeswalkers from silver-bordered sets.',
+        value: 'includeSilveBorder'
+      },
+      {
+        label: 'Include Flip Cards',
+        desc: 'Include the Flip cards from Kamigawa block.',
+        value: 'includeFip'
       }
     ]
   },

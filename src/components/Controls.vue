@@ -38,7 +38,7 @@
     <div v-if="showFilters" class="mt-6 mb-4 grid grid-cols-2 gap-4 max-w-3xl mx-auto">
       <div v-for="filter in filters" :key="filter.value" class="flex items-start">
         <div class="mr-2 mt-1">
-          <input :id="filter.value" type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
+          <input :id="filter.value" type="checkbox" :value="filter.value" v-model="checkedFilters" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out">
         </div>
         <div>
           <label :for="filter.value" class="font-medium text-gray-700">
@@ -67,7 +67,8 @@ export default {
   data () {
     return {
       showEdit: false,
-      showFilters: false
+      showFilters: false,
+      checkedFilters: []
     }
   },
   computed: {
@@ -105,11 +106,11 @@ export default {
       this.showEdit = false
       this.showFilters = false
       try {
-        const searchURL = '/cards/random?q=is%3Acommander+f%3Acommander'
+        const searchUrl = this.determineUrl(this.checkedFilters)
         const responses = []
         this.players.map(async () => {
           try {
-            const response = await ax.get(searchURL)
+            const response = await ax.get(searchUrl)
             responses.push(response.data)
           } catch (err) {
             console.error(err)
@@ -118,6 +119,37 @@ export default {
         this.setCards(responses)
       } catch (err) {
         console.error(err)
+      }
+    },
+    determineUrl (filters) {
+      let baseUrl = '/cards/random?q=t%3Alegendary+'
+      if (!filters.length) {
+        baseUrl += 'is%3Acommander+f%3Acommander'
+        return baseUrl
+      } else {
+        const params = []
+        if (!filters.includes('includeVanilla')) {
+          params.push('-is%3Avanilla')
+        }
+        if (!filters.includes('includeFrenchVanilla')) {
+          params.push('-is%3Afrenchvanilla')
+        }
+        if (!filters.includes('includeBanned')) {
+          params.push('-banned%3Acommander')
+        }
+        if (!filters.includes('includeFlip')) {
+          params.push('-is%3Aflip')
+        }
+        if (!filters.includes('includeSilverBorder')) {
+          params.push('-border%3Asilver')
+        }
+        if (filters.includes('includePlaneswalkers')) {
+          params.push('t%3Acreature+or+t%3Aplaneswalker')
+        } else {
+          params.push('t%3Acreature')
+        }
+        const finalUrl = baseUrl + params.join('+')
+        return finalUrl
       }
     }
   }
