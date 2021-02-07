@@ -40,7 +40,12 @@ export default {
     },
     imgSrc (idx) {
       if (this.cards[idx]) {
-        return this.cards[idx].image_uris.border_crop
+        if (this.cards[idx].layout === 'normal') {
+          return this.cards[idx].image_uris.border_crop
+        }
+        if (this.cards[idx].layout === 'transform') {
+          return this.cards[idx].card_faces[0].image_uris.border_crop
+        }
       } else {
         return ''
       }
